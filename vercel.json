@@ -7,10 +7,14 @@
     }
   ],
   "routes": [
-    { "src": "/generate", "dest": "/generate.js" },
-    { "src": "/", "dest": "/index.html" }
+    {
+      "src": "/generate",
+      "dest": "/generate.js"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    }
   ],
-  {
   "outputDirectory": "."
-}
 }
