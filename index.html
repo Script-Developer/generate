@@ -3,107 +3,189 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Roblox GUI Generator</title>
+  <title>Roblox ScreenGui Generator</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0e0e0e;
-      color: white;
+      padding: 0;
+      font-family: sans-serif;
+      background: #0e0e0e;
+      color: #f0f0f0;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      justify-content: center;
+      height: 100vh;
     }
-
-    .box {
-      width: 500px;
-      background-color: #1c1c1c;
+    .container {
+      background: #1c1c1c;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      text-align: left;
+      width: 500px;
       position: relative;
     }
-
-    h1 {
-      margin-top: 0;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      margin-top: 10px;
-      margin-bottom: 4px;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 8px;
-      background: #2a2a2a;
-      border: none;
-      color: white;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    button {
-      margin-top: 15px;
-      width: 100%;
-      padding: 10px;
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      font-size: 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    textarea {
-      margin-top: 20px;
-      width: 100%;
-      height: 300px;
-      background: #1a1a1a;
-      color: #00ff91;
-      border: none;
-      padding: 10px;
-      font-family: monospace;
-      font-size: 13px;
-      white-space: pre;
-      border-radius: 5px;
-    }
-
     .close {
       position: absolute;
+      right: 10px;
       top: 10px;
-      right: 15px;
-      font-size: 18px;
-      background: none;
-      border: none;
-      color: white;
       cursor: pointer;
+      color: #f33;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      background: #2e2e2e;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-weight: bold;
+      background: #3a3a3a;
+      border: none;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background: #555;
+    }
+    .discord {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #7289da;
+      text-align: center;
+    }
+    .discord a {
+      text-decoration: none;
+      color: #7289da;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="box">
-    <button class="close" onclick="document.querySelector('.box').style.display='none'">X</button>
-    <h1>put your title name</h1>
+  <div class="container">
+    <div class="close" onclick="fakeClose()">X</div>
+    <h2>Roblox ScreenGui Generator</h2>
 
-    <label for="title">Title</label>
-    <input id="title" placeholder="put your title name" />
+    <label for="title">Put your title name here</label>
+    <input type="text" id="title" placeholder="e.g. Welcome GUI" />
 
-    <label for="label">Label</label>
-    <input id="label" placeholder="put your label name" />
+    <label for="label">Put your label name here</label>
+    <input type="text" id="label" placeholder="e.g. Click the Button Below" />
 
-    <label for="discord">Discord Link (optional)</label>
-    <input id="discord" placeholder="https://discord.gg/..." />
+    <label for="type">Add button or toggle button</label>
+    <select id="type">
+      <option>Button</option>
+      <option>Toggle Button</option>
+    </select>
 
-    <button onclick="generate()">Generate Roblox GUI</button>
+    <label>-- Button</label>
+    <textarea readonly rows="2">// Put your button script here
+print("Button Script Executed")</textarea>
 
-    <textarea id="output" readonly placeholder="Generated script will appear here..."></textarea>
+    <label>-- Toggle Button</label>
+    <textarea readonly rows="2">// Put your toggle script here
+print("Toggle Button Executed")</textarea>
+
+    <button onclick="generateScript()">Generate</button>
+    <button onclick="copyScript()">Copy Script</button>
+
+    <textarea id="output" rows="10" readonly style="display:none;"></textarea>
+
+    <div class="discord">
+      <a href="https://discord.gg/VwTM63a38Y" target="_blank">Join our Discord</a>
+    </div>
   </div>
 
-  <script src="obfuscate.js"></script>
+  <script>
+    function fakeClose() {
+      alert("X button clicked (does not close UI)");
+    }
+
+    function generateScript() {
+      const title = document.getElementById("title").value || "My GUI";
+      const label = document.getElementById("label").value || "My Label";
+      const type = document.getElementById("type").value;
+
+      const luaScript = `
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "GeneratedGui"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 300, 0, 150)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+
+local Title = Instance.new("TextLabel")
+Title.Text = "${title}"
+Title.Size = UDim2.new(1, 0, 0.3, 0)
+Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.SourceSansBold
+Title.TextScaled = true
+Title.Parent = Frame
+
+local Button = Instance.new("TextButton")
+Button.Text = "${label}"
+Button.Size = UDim2.new(0.8, 0, 0.3, 0)
+Button.Position = UDim2.new(0.1, 0, 0.5, 0)
+Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+Button.Font = Enum.Font.SourceSans
+Button.TextScaled = true
+Button.Parent = Frame
+
+local Close = Instance.new("TextButton")
+Close.Text = "X"
+Close.Size = UDim2.new(0, 30, 0, 30)
+Close.Position = UDim2.new(1, -35, 0, 5)
+Close.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+Close.TextColor3 = Color3.fromRGB(255, 255, 255)
+Close.Font = Enum.Font.SourceSansBold
+Close.TextScaled = true
+Close.Parent = Frame
+
+Close.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+Button.MouseButton1Click:Connect(function()
+    print("${type} Script Executed")
+end)
+`;
+
+      const output = document.getElementById("output");
+      output.style.display = "block";
+      output.value = luaScript.trim();
+    }
+
+    function copyScript() {
+      const output = document.getElementById("output");
+      if (output.value.trim() === "") {
+        alert("Please generate the script first.");
+        return;
+      }
+      navigator.clipboard.writeText(output.value).then(() => {
+        alert("Script copied to clipboard!");
+      });
+    }
+  </script>
 </body>
 </html>
